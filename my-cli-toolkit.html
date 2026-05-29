@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#1a1c20" id="themeColorMeta">
+<title>My CLI Toolkit · Field Reference</title>
+<style>
+  /* =======================================================================
+     THEME — 기본은 다크. data-theme 미설정 시 시스템 설정(prefers-color-scheme)을
+     따라가고, data-theme="light|dark" 가 있으면 그걸 강제 적용.
+     ======================================================================= */
+  :root {
+    color-scheme: dark;
+    /* Seed Design — DARK (default) · carrot brand on gray surfaces */
+    --bg:        #1a1c20;  /* bg.layer-basement → gray-1000 */
+    --bg-2:      #16181c;
+    --panel:     #2a3038;  /* bg.layer-default → gray-900 */
+    --panel-2:   #242a31;
+    --item:      #323a45;  /* hover surface */
+    --ink:       #f7f8f9;  /* fg.neutral */
+    --ink-dim:   #b0b3ba;  /* fg.neutral-muted */
+    --ink-faint: #868b94;  /* fg.neutral-subtle */
+    --line:      #3a424d;  /* stroke.neutral */
+    --line-soft: #2f3640;
+    --amber:     #ff6600;  /* palette.carrot-600 (brand) */
+    --amber-deep:#ff9364;  /* carrot-500 (brand on dark) */
+    --sage:      #42c593;  /* palette.green-500 (positive) */
+    --code-bg:   #20262d;
+    --code-ink:  #ff9364;
+    --keycap:    #323a45;
+    --keycap-edge:#4a5460;
+    --dot:       transparent;
+    --glow:      rgba(255,102,0,.16);
+    --shadow:    0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.65);
+    --grain:     0;
+    --grain-blend: overlay;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme]) {
+      color-scheme: light;
+      --bg:        #f3f4f5;  /* bg.layer-basement → gray-200 */
+      --bg-2:      #eeeff1;
+      --panel:     #ffffff;  /* bg.layer-default → gray-00 */
+      --panel-2:   #f7f8f9;
+      --item:      #f3f4f5;
+      --ink:       #1a1c20;  /* fg.neutral → gray-1000 */
+      --ink-dim:   #555d6d;  /* fg.neutral-muted → gray-800 */
+      --ink-faint: #868b94;  /* fg.neutral-subtle → gray-700 */
+      --line:      #dcdee3;  /* stroke.neutral → gray-400 */
+      --line-soft: #eeeff1;
+      --amber:     #ff6600;  /* carrot-600 */
+      --amber-deep:#e14d00;  /* carrot-700 (pressed) */
+      --sage:      #079171;  /* green-700 */
+      --code-bg:   #f7f8f9;
+      --code-ink:  #e14d00;
+      --keycap:    #ffffff;
+      --keycap-edge:#dcdee3;
+      --dot:       transparent;
+      --glow:      rgba(255,102,0,.12);
+      --shadow:    0 1px 2px rgba(26,28,32,.06), 0 10px 26px -18px rgba(26,28,32,.22);
+      --grain:     0;
+      --grain-blend: multiply;
+    }
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --bg:#f3f4f5; --bg-2:#eeeff1; --panel:#ffffff; --panel-2:#f7f8f9; --item:#f3f4f5;
+    --ink:#1a1c20; --ink-dim:#555d6d; --ink-faint:#868b94; --line:#dcdee3; --line-soft:#eeeff1;
+    --amber:#ff6600; --amber-deep:#e14d00; --sage:#079171; --code-bg:#f7f8f9; --code-ink:#e14d00;
+    --keycap:#ffffff; --keycap-edge:#dcdee3; --dot:transparent; --glow:rgba(255,102,0,.12);
+    --shadow:0 1px 2px rgba(26,28,32,.06), 0 10px 26px -18px rgba(26,28,32,.22); --grain:0; --grain-blend:multiply;
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg:#1a1c20; --bg-2:#16181c; --panel:#2a3038; --panel-2:#242a31; --item:#323a45;
+    --ink:#f7f8f9; --ink-dim:#b0b3ba; --ink-faint:#868b94; --line:#3a424d; --line-soft:#2f3640;
+    --amber:#ff6600; --amber-deep:#ff9364; --sage:#42c593; --code-bg:#20262d; --code-ink:#ff9364;
+    --keycap:#323a45; --keycap-edge:#4a5460; --dot:transparent; --glow:rgba(255,102,0,.16);
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.65); --grain:0; --grain-blend:overlay;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  :root {
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", "Fira Code", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard Variable", Pretendard, "Noto Sans KR", "Segoe UI", sans-serif;
+  }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    transition: background .3s ease, color .3s ease;
+    /* dotted blueprint grid */
+    background-image:
+      radial-gradient(var(--dot) 1.1px, transparent 1.1px),
+      radial-gradient(circle at 50% -10%, var(--glow), transparent 55%);
+    background-size: 24px 24px, 100% 700px;
+    background-attachment: fixed, fixed;
+    background-repeat: repeat, no-repeat;
+    min-height: 100vh;
+  }
+  /* film grain overlay */
+  body::after {
+    content: ""; position: fixed; inset: 0; z-index: 999; pointer-events: none;
+    opacity: var(--grain); mix-blend-mode: var(--grain-blend);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  code, kbd, .mono { font-family: var(--mono); }
+  ::selection { background: var(--amber); color: var(--bg); }
+
+  /* inline svg icons */
+  .ic-svg { width: 15px; height: 15px; display: block; flex-shrink: 0; }
+  .bic { display: inline-flex; align-items: center; }
+  .eye .ic-svg { width: 16px; height: 16px; }
+
+  /* interactive base: touch + visible keyboard focus */
+  button, a, input, .copyable {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  :focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  /* skip link */
+  .skip-link {
+    position: absolute; left: 12px; top: -60px; z-index: 200;
+    background: var(--amber); color: var(--bg); font-family: var(--mono); font-weight: 700;
+    padding: 9px 14px; border-radius: 9px; text-decoration: none; transition: top .15s;
+  }
+  .skip-link:focus { top: 12px; }
+
+  /* ---------------------------------------------------------------- MASTHEAD */
+  .masthead {
+    max-width: 1480px; margin: 0 auto; padding: 40px 24px 22px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .masthead::before, .masthead::after {
+    content: ""; position: absolute; bottom: -1px; width: 60px; height: 3px; background: var(--amber);
+  }
+  .masthead::before { left: 24px; }
+  .masthead::after  { right: 24px; box-shadow: 0 0 14px var(--glow); }
+  .kicker {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--amber); font-weight: 600; display: flex; align-items: center; gap: 10px;
+  }
+  .kicker::before { content: "▸"; }
+  .kicker .rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--line), transparent); }
+  h1.title {
+    font-family: var(--sans); font-weight: 800; font-size: clamp(32px, 6.5vw, 56px);
+    letter-spacing: -1.6px; margin: 10px 0 6px; line-height: 1.02; color: var(--ink);
+    display: flex; align-items: baseline; flex-wrap: wrap; text-wrap: balance;
+  }
+  h1.title .amp { color: var(--amber); }
+  .cursor {
+    display: inline-block; width: .26em; height: .26em; background: var(--amber);
+    border-radius: 50%; margin-left: .14em; transform: translateY(-.04em);
+  }
+  .tagline { font-size: 14px; color: var(--ink-dim); max-width: 640px; }
+  .mast-stats {
+    margin-top: 18px; display: flex; gap: 22px; flex-wrap: wrap;
+    font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); letter-spacing: .3px;
+    font-variant-numeric: tabular-nums;
+  }
+  .mast-stats b { color: var(--sage); font-weight: 600; }
+
+  /* ---------------------------------------------------------------- TOOLBAR */
+  /* search bar + index stick together as one block */
+  .sticky-top {
+    position: sticky; top: 0; z-index: 60;
+    background: color-mix(in srgb, var(--bg) 86%, transparent);
+    backdrop-filter: blur(14px) saturate(1.2);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar { border-bottom: 1px solid var(--line-soft); }
+  .bar-inner { max-width: 1480px; margin: 0 auto; padding: 11px 24px; display: flex; gap: 11px; align-items: center; flex-wrap: wrap; }
+  .search-wrap { flex: 1; min-width: 220px; position: relative; }
+  #search {
+    width: 100%; padding: 10px 36px; border-radius: 10px; border: 1px solid var(--line);
+    background: var(--item); color: var(--ink); font-size: 14px; font-family: var(--mono);
+    outline: none; transition: border-color .15s, box-shadow .15s;
+  }
+  #search::placeholder { color: var(--ink-faint); }
+  #search:focus { border-color: var(--amber); box-shadow: 0 0 0 3px var(--glow); }
+  .search-wrap .ic { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--ink-faint); pointer-events: none; display: flex; }
+  .search-wrap .slash { position: absolute; right: 11px; top: 50%; transform: translateY(-50%); font-family: var(--mono); font-size: 11px; color: var(--ink-faint); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; pointer-events: none; }
+  .search-wrap .clear { position: absolute; right: 9px; top: 50%; transform: translateY(-50%); display: none; cursor: pointer; border: none; background: var(--keycap); color: var(--ink-dim); font-size: 13px; border-radius: 6px; padding: 3px 7px; font-family: var(--mono); }
+  .search-wrap .clear:hover { color: var(--ink); }
+  .btn {
+    font-family: var(--sans); border: 1px solid var(--line); background: var(--panel); color: var(--ink-dim);
+    padding: 9px 14px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600;
+    white-space: nowrap; display: inline-flex; align-items: center; gap: 7px;
+    transition: color .15s, border-color .15s, background-color .15s, transform .12s;
+  }
+  .btn:hover { color: var(--ink); border-color: var(--ink-faint); transform: translateY(-1px); }
+  .btn.active { background: var(--amber); border-color: var(--amber); color: #fff; }
+  .btn.active:hover { background: var(--amber-deep); border-color: var(--amber-deep); }
+
+  /* ---------------------------------------------------------------- INDEX NAV */
+  .index-inner {
+    max-width: 1480px; margin: 0 auto; padding: 9px 24px;
+    display: flex; align-items: center; gap: 13px;
+  }
+  .index-label {
+    flex-shrink: 0; font-family: var(--mono); font-size: 10.5px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--ink-faint);
+  }
+  .index-chips {
+    display: flex; gap: 8px; overflow-x: auto; scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent; padding: 2px 0; -webkit-overflow-scrolling: touch;
+    /* fade hint at the right edge when scrollable */
+    mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), transparent 100%);
+  }
+  .index-chips::-webkit-scrollbar { height: 6px; }
+  .index-chips::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  nav a {
+    text-decoration: none; font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--ink-dim);
+    padding: 6px 12px; border: 1px solid var(--line-soft); border-radius: 999px; background: var(--bg-2);
+    transition: color .15s, border-color .15s, transform .12s, background-color .15s;
+    display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; flex-shrink: 0;
+  }
+  nav a .num { font-family: var(--mono); color: var(--amber); font-size: 11px; }
+  nav a:hover { color: var(--amber); border-color: var(--amber); transform: translateY(-1px); }
+
+  /* ---------------------------------------------------------------- LAYOUT */
+  main { max-width: 1480px; margin: 0 auto; padding: 22px 24px 90px; }
+  .meta-strip { font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); margin: 4px 0 22px; display: flex; gap: 10px 18px; flex-wrap: wrap; align-items: center; }
+  .meta-strip .tag { background: var(--panel); border: 1px solid var(--line-soft); padding: 5px 11px; border-radius: 8px; }
+  .meta-strip .tag b { color: var(--sage); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(430px, 1fr)); gap: 22px; align-items: start; }
+
+  /* ---------------------------------------------------------------- CARD */
+  .card {
+    position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+    box-shadow: var(--shadow); scroll-margin-top: 124px; overflow: hidden;
+    opacity: 0; transform: translateY(16px); animation: rise .55s cubic-bezier(.2,.75,.2,1) both;
+  }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  .card::before { content: none; }
+  .card-head { position: relative; padding: 20px 22px 16px; border-bottom: 1px solid var(--line-soft); background: var(--panel-2); }
+  .chno {
+    font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--amber-deep);
+    letter-spacing: .5px; margin-bottom: 11px; display: inline-flex; align-items: center; gap: 2px;
+    font-variant-numeric: tabular-nums; background: color-mix(in srgb, var(--amber) 14%, transparent);
+    padding: 3px 10px; border-radius: 999px;
+  }
+  .chno .ln { display: none; }
+  .card-head .name {
+    font-family: var(--sans); font-size: 18px; font-weight: 700; letter-spacing: -.3px;
+    display: flex; align-items: center; gap: 10px; color: var(--ink); flex-wrap: wrap;
+    margin: 0; text-wrap: balance;
+  }
+  .card-head .name .em { font-size: 20px; }
+  .card-head .name .pill {
+    font-family: var(--mono); font-size: 10.5px; font-weight: 600; color: var(--ink-faint);
+    background: var(--bg-2); border: 1px solid var(--line-soft); padding: 3px 9px;
+    border-radius: 999px; margin-left: auto; letter-spacing: .3px; white-space: nowrap;
+  }
+  .card-head .summary { font-size: 13px; color: var(--ink-dim); margin-top: 9px; line-height: 1.6; }
+  .card-head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); margin-top: 11px; word-break: break-all; }
+  .card-head .meta a { color: var(--amber); text-decoration: none; }
+  .card-head .meta a:hover { text-decoration: underline; }
+  .card-head .meta .term { color: var(--sage); font-style: normal; }
+
+  .group-label {
+    font-family: var(--mono); font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.5px; color: var(--amber-deep); padding: 16px 22px 7px;
+    display: flex; align-items: center; gap: 9px; margin: 0;
+  }
+  .group-label::before { content: "›"; color: var(--amber); font-weight: 700; }
+  .group-label .gl-line { flex: 1; height: 1px; background: var(--line-soft); }
+
+  .card > .item:last-child { margin-bottom: 14px; }
+  .item {
+    display: flex; align-items: flex-start; gap: 12px; padding: 9px 14px; margin: 0 8px;
+    border-radius: 10px; transition: background .12s;
+  }
+  .item:hover { background: var(--item); }
+  .item-main { flex: 1; min-width: 0; }
+  .cmd-line { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+
+  .code {
+    font-family: var(--mono); font-size: 13px; background: var(--code-bg); color: var(--code-ink);
+    padding: 3px 9px; border-radius: 7px; cursor: pointer; border: 1px solid transparent;
+    transition: border-color .12s, box-shadow .12s, transform .12s; word-break: break-word; position: relative;
+  }
+  .code:hover { border-color: var(--amber); box-shadow: 0 0 0 3px var(--glow); }
+  .code:active { transform: scale(.975); }
+  kbd.key {
+    font-family: var(--mono); font-size: 12.5px; font-weight: 600; background: var(--keycap); color: var(--ink);
+    padding: 3px 9px; border-radius: 7px; border: 1px solid var(--keycap-edge); border-bottom-width: 3px;
+    cursor: pointer; min-width: 20px; text-align: center; display: inline-block;
+    transition: color .1s, border-color .1s, transform .1s, border-bottom-width .1s;
+  }
+  kbd.key:hover { border-color: var(--amber); color: var(--amber); transform: translateY(-1px); }
+  kbd.key:active { transform: translateY(1px); border-bottom-width: 1px; }
+  .desc { font-size: 12.5px; color: var(--ink-dim); margin-top: 5px; line-height: 1.55; }
+  .ex { margin-top: 5px; font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .ex .ex-label { color: var(--sage); }
+  .ex .code { font-size: 11.5px; padding: 2px 7px; }
+  .ex .code::before { content: "▸"; opacity: .6; }
+
+  .placeholder-note {
+    margin: 6px 14px 14px; padding: 14px 16px; border: 1.5px dashed var(--line);
+    border-radius: 12px; background: var(--item); color: var(--ink-faint); font-size: 12.5px; line-height: 1.65;
+  }
+  .placeholder-note b { color: var(--amber); font-family: var(--mono); }
+  .placeholder-note code { background: var(--code-bg); color: var(--code-ink); padding: 1px 6px; border-radius: 5px; font-size: 12px; }
+
+  .eye {
+    border: none; background: none; cursor: pointer; color: var(--ink-faint);
+    padding: 5px; border-radius: 7px; font-size: 14px; line-height: 1; flex-shrink: 0;
+    opacity: 0; transition: opacity .12s, color .12s, background .12s;
+  }
+  .item:hover .eye { opacity: .8; }
+  .eye:hover { color: var(--amber); background: var(--keycap); opacity: 1; }
+
+  .item.is-hidden { display: none; }
+  body.reveal .item.is-hidden { display: flex; opacity: .45; }
+  body.reveal .item.is-hidden .eye { opacity: 1; color: var(--sage); }
+  .hide-badge { display: none; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--sage); border: 1px solid color-mix(in srgb, var(--sage) 45%, transparent); padding: 1px 7px; border-radius: 999px; letter-spacing: .5px; }
+  body.reveal .item.is-hidden .hide-badge { display: inline-block; }
+
+  .item.filtered { display: none !important; }
+  .card.card-hidden { display: none; }
+  .group-label.group-hidden { display: none; }
+  .no-results { text-align: center; color: var(--ink-faint); padding: 70px 20px; font-family: var(--mono); font-size: 14px; display: none; }
+  .no-results .big { font-size: 30px; display: block; margin-bottom: 12px; }
+
+  /* ---------------------------------------------------------------- TOAST */
+  #toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--ink); color: var(--bg); padding: 11px 18px; border-radius: 11px;
+    font-family: var(--mono); font-size: 12.5px; font-weight: 600; opacity: 0; pointer-events: none;
+    transition: opacity .22s cubic-bezier(.2,.8,.2,1), transform .22s cubic-bezier(.2,.8,.2,1);
+    z-index: 1000; box-shadow: 0 10px 34px -10px rgba(0,0,0,.5);
+    border: 1px solid var(--amber); display: flex; align-items: center; gap: 9px; max-width: 80vw;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  #toast .t-txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  footer {
+    max-width: 1480px; margin: 0 auto; text-align: center; color: var(--ink-faint);
+    font-family: var(--mono); font-size: 11.5px; padding: 32px 24px; border-top: 1px solid var(--line);
+    letter-spacing: .3px; line-height: 1.8;
+  }
+  footer .amber { color: var(--amber); }
+
+  @media (max-width: 680px) {
+    .grid { grid-template-columns: 1fr; gap: 18px; }
+    .masthead { padding: 30px 16px 20px; }
+    .masthead::before, .masthead::after { width: 44px; }
+    .masthead::before { left: 16px; } .masthead::after { right: 16px; }
+    .bar-inner, .index-inner, main { padding-left: 16px; padding-right: 16px; }
+    .tagline { font-size: 13px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .card { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">본문으로 건너뛰기</a>
+
+<header class="masthead">
+  <div class="kicker">Field Reference <span class="rule" aria-hidden="true"></span> v1</div>
+  <h1 class="title">My CLI Toolkit<span class="cursor" aria-hidden="true"></span></h1>
+  <div class="tagline">개인 CLI 명령어 · 단축키 모음.</div>
+  <div class="mast-stats">
+    <span>도구 <b id="stTools">11</b>개</span>
+    <span>항목 <b id="stItems">0</b>개</span>
+    <span>테마 <b id="stTheme">시스템</b></span>
+  </div>
+</header>
+
+<div class="sticky-top">
+<div class="bar">
+  <div class="bar-inner">
+    <div class="search-wrap">
+      <span class="ic" aria-hidden="true" id="searchIcon"></span>
+      <input id="search" type="search" aria-label="명령어, 단축키, 설명 검색" placeholder="명령어 · 단축키 · 설명 검색…" autocomplete="off" spellcheck="false" enterkeyhint="search">
+      <span class="slash" aria-hidden="true">/</span>
+      <button class="clear" id="clearSearch" type="button" aria-label="검색어 지우기">esc</button>
+    </div>
+    <button class="btn" id="revealBtn" type="button" aria-pressed="false" aria-label="숨긴 항목 보기 또는 숨기기"><span class="bic" id="revealIcon" aria-hidden="true"></span><span id="revealText">숨긴 항목</span></button>
+    <button class="btn" id="resetBtn" type="button" aria-label="숨김 상태 초기화"><span class="bic" id="resetIcon" aria-hidden="true"></span>초기화</button>
+    <button class="btn" id="themeBtn" type="button" aria-label="테마 전환: 시스템, 라이트, 다크 순환"><span class="bic" id="themeIcon" aria-hidden="true"></span><span id="themeText">시스템</span></button>
+  </div>
+</div>
+
+<nav class="index" aria-label="도구 목록 바로가기">
+  <div class="index-inner">
+    <span class="index-label">Index</span>
+    <div id="nav" class="index-chips"></div>
+  </div>
+</nav>
+</div><!-- /.sticky-top -->
+
+<main id="main">
+  <div class="meta-strip">
+    <span class="tag">클릭 = 복사</span>
+    <span class="tag">눈 버튼 = 숨기기</span>
+    <span class="tag"><b>/</b> = 검색</span>
+    <span id="hiddenCount"></span>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="no-results" id="noResults" role="status">결과 없음</div>
+</main>
+
+<div id="toast" role="status" aria-live="polite"><span class="t-txt">복사됨</span></div>
+
+<footer>
+  <span class="amber">My CLI Toolkit</span> · 오프라인 로컬 레퍼런스 · 설정은 브라우저에 저장
+</footer>
+
+<script>
+/* =========================================================================
+   DATA — 각 도구의 공식 문서/README를 직접 확인해서 반영했습니다.
+   item: { c:"명령/단축키", k:true(키보드)?, d:"설명", ex:"예시" }
+   { group:"소제목" } / { custom:true, label, note }
+   ========================================================================= */
+const TOOLS = [
+  /* -------------------------------------------------- ZOXIDE */
+  {
+    id: "zoxide", name: "Zoxide", pill: "smarter cd",
+    summary: "디렉토리 이동을 똑똑하게. 자주·최근에 방문한 폴더를 기억해서 짧은 키워드만으로 점프해 줍니다 (cd 대체).",
+    meta: 'github.com/ajeetdsouza/zoxide',
+    items: [
+      { group: "이동" },
+      { c: "z foo", d: '"foo"가 들어간, 가장 자주 가는 폴더로 점프', ex: "z dotfiles" },
+      { c: "z foo bar", d: "경로에 foo·bar 둘 다 포함된 폴더로 점프", ex: "z duego frontend" },
+      { c: "z ~/foo", d: "일반 cd처럼 실제 경로로 이동", ex: "z ~/Downloads" },
+      { c: "z ..", d: "상위(부모) 폴더로 이동" },
+      { c: "z -", d: "직전에 있던 폴더로 되돌아가기" },
+      { c: "zi foo", d: "후보가 여러 개일 때 fzf 목록에서 골라 이동 (interactive)", ex: "zi src" },
+      { c: "z foo <Space><Tab>", k: true, d: "탭 자동완성으로 후보 미리보기 (bash 4.4+/zsh/fish)" },
+      { group: "데이터베이스 관리 (zoxide ...)" },
+      { c: "zoxide query foo", d: "이동하지 않고, 매칭되는 폴더 경로만 출력 (확인용)", ex: "zoxide query duego" },
+      { c: "zoxide query -l", d: "DB에 저장된 폴더 목록 전체 출력" },
+      { c: "zoxide add /path", d: "폴더를 수동으로 DB에 추가", ex: "zoxide add ~/projects" },
+      { c: "zoxide remove /path", d: "폴더를 DB에서 제거", ex: "zoxide remove ~/old" },
+      { c: "zoxide edit", d: "DB 항목을 직접 편집 (점수 보기/삭제 등)" },
+    ]
+  },
+
+  /* -------------------------------------------------- YAZI */
+  {
+    id: "yazi", name: "Yazi", pill: "file manager",
+    summary: "터미널에서 키보드만으로 쓰는 빠른 파일 매니저. 폴더 탐색·복사/이동/삭제·미리보기·검색을 키 몇 개로 처리합니다.",
+    meta: 'yazi-rs.github.io · 실행: <span class="term">yazi</span>',
+    items: [
+      { group: "이동" },
+      { c: "k / ↑", k: true, d: "커서 위로" },
+      { c: "j / ↓", k: true, d: "커서 아래로" },
+      { c: "l / →", k: true, d: "선택한 폴더로 들어가기 (파일이면 열기)" },
+      { c: "h / ←", k: true, d: "상위(부모) 폴더로 나가기" },
+      { c: "g g", k: true, d: "맨 위로 (g 두 번)" },
+      { c: "G", k: true, d: "맨 아래로" },
+      { c: "K / J", k: true, d: "미리보기 화면을 5줄 위/아래로" },
+      { c: "z", k: true, d: "fzf로 폴더 이동 / 파일 찾기" },
+      { c: "Z", k: true, d: "zoxide로 폴더 이동" },
+      { c: ".", k: true, d: "숨김 파일 표시 켜기/끄기" },
+      { group: "선택" },
+      { c: "Space", k: true, d: "현재 파일 선택/해제 (토글)" },
+      { c: "v", k: true, d: "비주얼 모드 — 드래그처럼 여러 개 선택" },
+      { c: "V", k: true, d: "비주얼 모드 (선택 해제용)" },
+      { c: "Ctrl + a", k: true, d: "전체 선택" },
+      { c: "Ctrl + r", k: true, d: "선택 반전" },
+      { c: "Esc", k: true, d: "선택 취소" },
+      { group: "복사 / 이동 / 삭제" },
+      { c: "y", k: true, d: "복사 (yank)" },
+      { c: "x", k: true, d: "잘라내기 (cut)" },
+      { c: "p", k: true, d: "붙여넣기" },
+      { c: "P", k: true, d: "덮어쓰며 붙여넣기" },
+      { c: "Y / X", k: true, d: "복사/잘라내기 대기 상태 취소" },
+      { c: "d", k: true, d: "휴지통으로 보내기" },
+      { c: "D", k: true, d: "영구 삭제 — 복구 불가, 주의!" },
+      { c: "a", k: true, d: "새 파일 만들기 (이름 끝에 / 붙이면 폴더 생성)" },
+      { c: "r", k: true, d: "이름 바꾸기 (rename)" },
+      { group: "열기 / 실행" },
+      { c: "o / Enter", k: true, d: "선택한 파일 열기" },
+      { c: "O", k: true, d: "어떤 앱으로 열지 직접 골라서 열기" },
+      { c: ";", k: true, d: "셸 명령 실행 (끝날 때까지 안 기다림)" },
+      { c: ":", k: true, d: "셸 명령 실행 (끝날 때까지 기다림)" },
+      { group: "경로 복사 (c → ...)" },
+      { c: "c c", k: true, d: "파일 전체 경로 복사" },
+      { c: "c d", k: true, d: "현재 폴더 경로 복사" },
+      { c: "c f", k: true, d: "파일 이름 복사" },
+      { c: "c n", k: true, d: "확장자 뺀 파일 이름 복사" },
+      { group: "검색 / 필터" },
+      { c: "/", k: true, d: "이름으로 찾기 (다음 방향)" },
+      { c: "?", k: true, d: "이름으로 찾기 (이전 방향)" },
+      { c: "n / N", k: true, d: "다음 / 이전 검색 결과로 이동" },
+      { c: "f", k: true, d: "현재 폴더 안에서 필터 (이름으로 거르기)" },
+      { c: "s", k: true, d: "fd로 파일 이름 검색" },
+      { c: "S", k: true, d: "ripgrep으로 파일 내용 검색" },
+      { c: "Ctrl + s", k: true, d: "검색 취소" },
+      { group: "탭 / 정렬 / 기타" },
+      { c: "t t", k: true, d: "새 탭 만들기 (t 두 번)" },
+      { c: "1 ~ 9", k: true, d: "N번째 탭으로 이동" },
+      { c: "[ / ]", k: true, d: "이전 / 다음 탭" },
+      { c: "{ / }", k: true, d: "탭 순서를 앞/뒤로 바꾸기" },
+      { c: "Ctrl + c", k: true, d: "현재 탭 닫기" },
+      { c: ", 그다음 키", k: true, d: "정렬 — ,m 수정시각 / ,s 크기 / ,n 이름 / ,e 확장자 / ,a 알파벳" },
+      { c: "q", k: true, d: "종료" },
+      { c: "Q", k: true, d: "폴더 이동 없이 종료 (cd 효과 끄고 종료)" },
+      { c: "F1 / ~", k: true, d: "도움말 메뉴 열기" },
+    ]
+  },
+
+  /* -------------------------------------------------- RIPGREP */
+  {
+    id: "ripgrep", name: "ripgrep (rg)", pill: "search",
+    summary: "엄청 빠른 코드·텍스트 검색기. grep보다 빠르고, .gitignore를 자동으로 존중해서 불필요한 파일은 건너뜁니다.",
+    meta: 'github.com/BurntSushi/ripgrep · 명령어: <span class="term">rg</span>',
+    items: [
+      { group: "기본 검색" },
+      { c: "rg foo", d: "현재 폴더 이하 모든 파일에서 foo 검색", ex: "rg TODO" },
+      { c: 'rg "foo bar"', d: "공백이 포함된 문구는 따옴표로 감싸기", ex: 'rg "import React"' },
+      { c: "rg foo src/", d: "특정 폴더/파일에서만 검색", ex: "rg useState src/" },
+      { c: "rg -e foo -e bar", d: "여러 패턴을 동시에 검색", ex: "rg -e error -e warn" },
+      { group: "자주 쓰는 플래그" },
+      { c: "rg -i foo", d: "대소문자 무시 (ignore case)", ex: "rg -i error" },
+      { c: "rg -n foo", d: "줄 번호 표시 (기본 켜짐 · 끄려면 -N)" },
+      { c: "rg -w foo", d: "단어 단위로 정확히 일치 (word)", ex: "rg -w log  → logger 는 제외" },
+      { c: "rg -v foo", d: "foo가 없는 줄만 표시 (invert / 반대)", ex: "rg -v test" },
+      { c: "rg -l foo", d: "매칭된 파일 이름만 나열 (list)", ex: "rg -l TODO" },
+      { c: "rg -c foo", d: "파일별 매칭 개수 세기 (count)", ex: "rg -c console.log" },
+      { c: "rg -o foo", d: "줄 전체가 아니라 매칭된 부분만 출력 (only)" },
+      { c: "rg -F 'a.b()'", d: "정규식이 아닌 일반 문자열로 검색 (Fixed)", ex: "rg -F 'config.get('" },
+      { c: "rg -s foo", d: "대소문자 구분해서 검색 (smart-case 끄기)" },
+      { group: "문맥 (앞뒤 줄 보기)" },
+      { c: "rg -A 3 foo", d: "매칭 줄 다음 3줄도 함께 표시 (After)" },
+      { c: "rg -B 3 foo", d: "매칭 줄 이전 3줄도 함께 표시 (Before)" },
+      { c: "rg -C 3 foo", d: "매칭 줄 앞뒤 3줄씩 표시 (Context)", ex: "rg -C 2 error" },
+      { group: "파일 종류 / 범위" },
+      { c: "rg -t py foo", d: "특정 파일 타입만 검색 (type)", ex: "rg -t js useState" },
+      { c: "rg -T py foo", d: "특정 파일 타입은 제외" },
+      { c: 'rg --glob "*.md" foo', d: "glob 패턴으로 파일 한정", ex: 'rg --glob "*.ts" foo' },
+      { c: 'rg --glob "!*.test.js" foo', d: "특정 패턴 파일 제외 ( ! 로 시작 )" },
+      { c: "rg --hidden foo", d: "숨김 파일(.으로 시작)도 검색" },
+      { c: "rg -u / -uu / -uuu", d: "무시 규칙 점점 풀기 (-uu: 숨김포함, -uuu: .gitignore·바이너리까지)" },
+      { group: "기타" },
+      { c: "rg foo -r bar", d: "출력에서 foo를 bar로 바꿔 미리보기 (replace · 실제 파일은 안 바뀜)" },
+      { c: "rg --files", d: "검색 없이 대상이 되는 파일 목록만 출력" },
+      { c: "rg --stats foo", d: "검색 통계(매칭 수·소요 시간 등) 표시" },
+    ]
+  },
+
+  /* -------------------------------------------------- FZF */
+  {
+    id: "fzf", name: "fzf", pill: "fuzzy finder",
+    summary: "무엇이든 목록에서 빠르게 골라주는 퍼지 파인더. 파이프로 받은 목록을 인터랙티브하게 검색·선택합니다.",
+    meta: 'github.com/junegunn/fzf',
+    items: [
+      { group: "셸 단축키 (설치 후 어디서나)" },
+      { c: "Ctrl + T", k: true, d: "파일/폴더를 골라 지금 입력 중인 명령줄에 끼워넣기", ex: "git add (Ctrl+T)" },
+      { c: "Ctrl + R", k: true, d: "명령 히스토리 검색해서 재실행 (한 번 더 누르면 정렬 토글)" },
+      { c: "Alt + C", k: true, d: "폴더를 골라 그 폴더로 cd" },
+      { c: "**<Tab>", k: true, d: "퍼지 자동완성 트리거", ex: "vim **<Tab> / kill -9 **<Tab>" },
+      { group: "기본 실행" },
+      { c: "fzf", d: "현재 폴더 파일 목록에서 하나 골라 출력" },
+      { c: "fzf -q foo", d: "시작할 때 검색어를 미리 입력 (query)", ex: "fzf -q config" },
+      { c: "fzf -m", d: "여러 개 선택 (Tab으로 체크, multi)" },
+      { c: "fzf --height 40%", d: "전체화면 대신 화면 아래 40%만 사용" },
+      { c: "fzf --layout reverse", d: "목록을 위에서 아래 순서로 표시" },
+      { c: "fzf --preview 'cat {}'", d: "오른쪽에 미리보기 창 ({}는 선택 항목)", ex: "fzf --preview 'bat --color=always {}'" },
+      { group: "파이프 / 활용 패턴" },
+      { c: "vim $(fzf)", d: "fzf로 고른 파일을 vim으로 열기" },
+      { c: "cat \"$(fzf)\"", d: "고른 파일 내용 출력" },
+      { c: "cd \"$(find . -type d | fzf)\"", d: "폴더를 골라 그곳으로 이동" },
+      { c: "git switch $(git branch | fzf)", d: "브랜치를 골라 전환" },
+      { c: "kill -9 $(ps -ef | fzf | awk '{print $2}')", d: "프로세스를 골라서 종료" },
+      { c: "fzf --bind 'enter:become(vim {})'", d: "Enter 누르면 곧바로 vim으로 열기" },
+    ]
+  },
+
+  /* -------------------------------------------------- SERENA */
+  {
+    id: "serena", name: "Serena", pill: "MCP",
+    summary: "AI 코딩 에이전트에게 '의미 기반' 코드 검색·편집 능력을 주는 MCP 도구 모음(40+ 언어). 도구들은 보통 에이전트가 자동 호출합니다.",
+    meta: 'github.com/oraios/serena · 문서: <a href="https://oraios.github.io/serena" target="_blank" rel="noopener">oraios.github.io/serena</a>',
+    items: [
+      { group: "주요 툴 (에이전트가 호출)" },
+      { c: "find symbol", d: "코드 전체에서 심볼(함수·클래스 등) 찾기" },
+      { c: "find referencing symbols", d: "그 심볼을 참조하는 모든 위치 찾기" },
+      { c: "symbol overview", d: "파일의 구조(목차) 한눈에 보기" },
+      { c: "find declaration / find implementations", d: "선언 위치 / 구현 위치 찾기" },
+      { c: "replace symbol body", d: "심볼 본문을 통째로 교체" },
+      { c: "insert after / before symbol", d: "특정 심볼 앞/뒤에 코드 삽입" },
+      { c: "safe delete", d: "참조까지 고려해 안전하게 심볼 삭제" },
+      { c: "rename", d: "심볼 이름 일괄 변경" },
+      { c: "search_for_pattern", d: "정규식 패턴 검색" },
+      { c: "replace_content", d: "텍스트 치환" },
+    ]
+  },
+
+  /* -------------------------------------------------- CMUX */
+  {
+    id: "cmux", name: "Cmux", pill: "terminal app",
+    summary: "AI 코딩 에이전트를 위한 macOS 터미널 앱(Ghostty 기반). 세로 탭·분할 창·내장 브라우저·알림 링을 제공합니다.",
+    meta: 'github.com/manaflow-ai/cmux',
+    items: [
+      { group: "CLI 명령어" },
+      { c: "cmux ssh user@remote", d: "원격 서버에 SSH 작업공간 열기" },
+      { c: "cmux claude-teams", d: "Claude Code 팀(teammate) 모드" },
+      { c: "cmux notify", d: "에이전트에 알림 보내기" },
+      { c: "cmux restore-session", d: "마지막으로 저장된 세션 다시 적용" },
+      { group: "단축키" },
+      { c: "⌘ N", k: true, d: "새 작업공간(workspace)" },
+      { c: "⌘ T", k: true, d: "새 탭(surface)" },
+      { c: "⌘ D", k: true, d: "오른쪽으로 화면 분할" },
+      { c: "⌘ ⇧ D", k: true, d: "아래로 화면 분할" },
+      { c: "⌘ I", k: true, d: "알림 패널 열기" },
+      { c: "⌘ ⇧ U", k: true, d: "가장 최근 안 읽은 항목으로 점프" },
+      { c: "⌘ ⇧ L", k: true, d: "분할 화면에 브라우저 열기" },
+      { c: "⌘ K", k: true, d: "스크롤백(이전 출력) 지우기" },
+      { c: "⌘ ,", k: true, d: "설정 열기" },
+    ]
+  },
+
+  /* -------------------------------------------------- NEOVIM */
+  {
+    id: "neovim", name: "Neovim", pill: "editor",
+    summary: "모드(mode)로 동작하는 강력한 터미널 에디터. 처음엔 '지금 무슨 모드인지'와 'Esc로 빠져나오기'만 기억하면 됩니다.",
+    meta: 'neovim.io · 실행: <span class="term">nvim 파일명</span> · 막히면 언제나 <span class="term">Esc</span>',
+    items: [
+      { group: "① 모드 개념 (가장 중요)" },
+      { c: "Normal 모드", d: "기본 모드. 글자가 입력되지 않고 이동·명령에 쓰임. Esc를 누르면 항상 여기로 돌아옴" },
+      { c: "Insert 모드", d: "실제로 글자를 타이핑하는 모드. i·a·o 등으로 진입" },
+      { c: "Visual 모드", d: "텍스트를 블록으로 선택하는 모드. v로 진입" },
+      { group: "② 모드 전환 (초보가 헤매는 곳)" },
+      { c: "i", k: true, d: "커서 앞에서 입력 시작 (Insert 진입)" },
+      { c: "a", k: true, d: "커서 뒤에서 입력 시작 (append)" },
+      { c: "o", k: true, d: "아래에 새 줄을 만들고 입력 시작" },
+      { c: "Esc", k: true, d: "어느 모드에서든 Normal 모드로 복귀 (가장 중요)" },
+      { c: "v / V", k: true, d: "비주얼 선택 / 줄 단위 비주얼 선택" },
+      { group: "③ 저장 · 종료" },
+      { c: ":w", d: "저장 (write) — 입력 후 Enter", ex: ":w" },
+      { c: ":q", d: "종료 (quit)" },
+      { c: ":wq", d: "저장하고 종료 ( :x 도 같음 )" },
+      { c: ":q!", d: "저장하지 않고 강제 종료 (변경 내용 버림)" },
+      { c: "ZZ", k: true, d: "Normal 모드에서 저장하고 종료" },
+      { group: "④ 이동 (Normal 모드)" },
+      { c: "h j k l", k: true, d: "왼 · 아래 · 위 · 오른쪽" },
+      { c: "w / b", k: true, d: "다음 단어 / 이전 단어로" },
+      { c: "0 / $", k: true, d: "줄 맨 앞 / 줄 맨 끝으로" },
+      { c: "g g / G", k: true, d: "파일 맨 위 / 맨 아래로" },
+      { c: ":42", d: "42번째 줄로 이동 ( 42G 도 같음 )" },
+      { c: "Ctrl + d / Ctrl + u", k: true, d: "반 페이지 아래 / 위로 스크롤" },
+      { group: "⑤ 편집" },
+      { c: "x", k: true, d: "커서의 글자 하나 삭제" },
+      { c: "d d", k: true, d: "한 줄 삭제(=잘라내기)" },
+      { c: "d w", k: true, d: "단어 하나 삭제" },
+      { c: "y y", k: true, d: "한 줄 복사 (yank)" },
+      { c: "p / P", k: true, d: "붙여넣기 (커서 뒤 / 앞)" },
+      { c: "u", k: true, d: "실행 취소 (undo)" },
+      { c: "Ctrl + r", k: true, d: "다시 실행 (redo)" },
+      { c: "r", k: true, d: "커서 글자 하나만 다른 글자로 교체" },
+      { c: "c c", k: true, d: "줄 전체를 지우고 입력 모드로" },
+      { c: ".", k: true, d: "직전에 한 편집을 그대로 반복" },
+      { group: "⑥ 검색 / 복사·붙여넣기" },
+      { c: "/foo", d: "아래 방향으로 foo 검색 — Enter", ex: "/error" },
+      { c: "?foo", d: "위 방향으로 검색" },
+      { c: "n / N", k: true, d: "다음 / 이전 검색 결과로" },
+      { c: ":%s/foo/bar/g", d: "파일 전체에서 foo를 bar로 모두 치환" },
+      { c: "v 로 선택 후 y / d", k: true, d: "선택한 부분 복사 / 삭제" },
+      { c: ":help", d: "내장 도움말 열기" },
+    ]
+  },
+
+  /* -------------------------------------------------- OMC */
+  {
+    id: "omc", name: "omc — oh-my-claudecode", pill: "orchestration",
+    summary: "Claude Code용 멀티 에이전트 오케스트레이션 레이어. 여러 전문 에이전트·스킬을 자동으로 조율해 작업을 끝냅니다.",
+    meta: 'github.com/Yeachan-Heo/oh-my-claudecode',
+    items: [
+      { group: "터미널 CLI" },
+      { c: 'omc team 3:executor "task"', d: "tmux로 워커 3개 띄워 병렬 작업", ex: 'omc team 3:executor "fix all TS errors"' },
+      { c: 'omc ask codex "prompt"', d: "로컬 provider CLI 호출하고 결과를 마크다운으로 저장" },
+      { c: "omc wait", d: "rate limit이 풀리면 자동으로 재개" },
+      { c: "omc hud", d: "실시간 관측(observability) 대시보드" },
+      { group: "세션 내 스킬 ( / 로 호출)" },
+      { c: '/team 3:executor "..."', d: "표준 파이프라인: 계획→PRD→실행→검증→수정" },
+      { c: '/autopilot "..."', d: "아이디어 → 동작하는 코드까지 완전 자동 실행" },
+      { c: "/ralph", d: "완료될 때까지 반복 (검증/수정 루프). 키워드 'ralph' 로도 발동" },
+      { c: "/ultrawork", d: "최대 병렬 실행 엔진. 키워드 'ulw' 로도 발동" },
+      { c: '/deep-interview "..."', d: "소크라테스식 요구사항 정리 인터뷰" },
+      { c: "/ccg", d: "Claude + Codex + Gemini 3개 모델 합의 후 종합" },
+      { c: "/oh-my-claudecode:cancel", d: "활성화된 OMC 모드 취소 (키워드 'cancelomc')" },
+      { c: "deepsearch", d: "(키워드) 코드베이스 집중 검색 라우팅" },
+    ]
+  },
+
+  /* -------------------------------------------------- OMX */
+  {
+    id: "omx", name: "omx — oh-my-codex", pill: "codex layer",
+    summary: "OpenAI Codex CLI용 워크플로우 레이어. Codex를 대체하지 않고 계획·프로젝트 정리·런타임 조율 기능을 얹어줍니다.",
+    meta: 'github.com/Yeachan-Heo/oh-my-codex',
+    items: [
+      { group: "CLI 명령어" },
+      { c: "omx doctor", d: "설치 무결성 점검" },
+      { c: "omx --madmax --high", d: "추천 실행 — tmux + HUD로 관리되는 세션" },
+      { c: "omx --direct --yolo", d: "HUD 관리 없이 일회성 세션 실행" },
+      { c: "omx update", d: "npm 확인 후 설정 새로고침" },
+      { c: "omx hud --watch", d: "상태 모니터링" },
+      { c: "omx team status <team-name>", d: "팀 런타임 상태 확인" },
+      { c: "omx wiki list --json", d: "프로젝트 위키 조회" },
+      { group: "세션 내 명령 ( $ 로 호출, Codex 안에서)" },
+      { c: '$deep-interview "clarify scope"', d: "의도와 경계를 명확히" },
+      { c: '$ralplan "approve the plan"', d: "구현 전략 승인" },
+      { c: '$ultragoal "turn plan into goals"', d: "계획을 지속적 다중 목표 실행으로" },
+      { c: '$team "execute parallel work"', d: "병렬 작업 조율" },
+      { c: '$ralph "persistent loop"', d: "단일 담당 완료 루프" },
+    ]
+  },
+
+  /* -------------------------------------------------- CLAUDE CODE */
+  {
+    id: "claudecode", name: "Claude Code CLI", pill: "슬래시 / 스킬",
+    summary: "터미널·IDE에서 쓰는 Anthropic 공식 AI 코딩 도구. 명령은 메시지 맨 앞에서 / 로 시작해야 인식됩니다. ( / 만 쳐도 전체 목록 표시)",
+    meta: 'docs: code.claude.com/docs',
+    items: [
+      { group: "기본 / 시작" },
+      { c: "/help", d: "도움말과 명령 목록 보기" },
+      { c: "/memory", d: "CLAUDE.md 메모리 파일 편집·관리" },
+      { c: "/status", d: "버전·모델·계정·연결 상태 보기" },
+      { c: "/doctor", d: "설치/설정 상태 진단 (f 누르면 자동 수정)" },
+      { c: "/exit", d: "종료 (별칭 /quit)" },
+      { group: "대화 / 컨텍스트 관리" },
+      { c: "/clear", d: "컨텍스트 비우고 새 대화 시작 (프로젝트 메모리는 유지). 별칭 /new /reset" },
+      { c: "/compact", d: "지금까지 대화를 요약해 컨텍스트 공간 확보", ex: "/compact 버그 수정에 집중해서 요약" },
+      { c: "/context", d: "컨텍스트 사용량을 그리드로 시각화" },
+      { c: "/resume", d: "이전 대화를 ID/이름으로 재개 (별칭 /continue)" },
+      { c: "/rewind", d: "코드·대화를 이전 시점으로 되돌리기 (별칭 /undo /checkpoint)" },
+      { group: "모델 / 실행 방식" },
+      { c: "/model", d: "AI 모델 전환 (기본값으로 저장)" },
+      { c: "/effort", d: "추론(생각) 강도 조절: low·medium·high·xhigh·max" },
+      { c: "/plan", d: "큰 작업 전에 플랜(계획) 모드로 진입", ex: "/plan 인증 버그 고치기" },
+      { c: "/fast", d: "패스트 모드 켜기/끄기" },
+      { group: "에이전트 / 권한 / 설정" },
+      { c: "/agents", d: "서브에이전트 설정 관리" },
+      { c: "/mcp", d: "MCP 서버 연결·인증 관리" },
+      { c: "/permissions", d: "도구 권한(allow/ask/deny) 규칙 관리 (별칭 /allowed-tools)" },
+      { c: "/config", d: "설정 화면(테마·모델·편집모드 등). 별칭 /settings" },
+      { c: "/skills", d: "사용 가능한 스킬 목록 보기" },
+      { c: "/theme", d: "색 테마 변경" },
+      { group: "리뷰 / 마무리" },
+      { c: "/diff", d: "변경사항(uncommitted) diff 뷰어 열기" },
+      { c: "/review", d: "PR을 현재 세션에서 로컬 리뷰" },
+      { c: "/code-review", d: "diff의 버그·정리거리 리뷰", ex: "/code-review --fix" },
+      { c: "/security-review", d: "변경분의 보안 취약점(인젝션·인증 등) 리뷰" },
+      { c: "/cost  ·  /usage", d: "세션 비용·사용량·플랜 한도 보기" },
+      { group: "커스텀 스킬 사용법" },
+      { c: ".claude/skills/<name>/SKILL.md", d: "여기에 스킬을 만들면 /<name> 으로 호출 (.claude/commands/<name>.md 도 동일하게 동작)" },
+      { custom: true, label: "내가 쓰는 커스텀 스킬", note: "여기에 자주 쓰는 나만의 Claude Code 스킬/슬래시 커맨드를 직접 채워 넣으세요. 예: <code>/내스킬</code> — 무슨 일을 하는지 한 줄 설명." },
+    ]
+  },
+
+  /* -------------------------------------------------- CODEX */
+  {
+    id: "codex", name: "Codex CLI", pill: "슬래시 / 스킬",
+    summary: "OpenAI의 로컬 AI 코딩 에이전트 CLI. codex로 실행하고, 세션 안에서는 / 로 명령을 씁니다.",
+    meta: 'github.com/openai/codex · developers.openai.com/codex/cli',
+    items: [
+      { group: "터미널 CLI" },
+      { c: "codex", d: "인터랙티브 세션(TUI) 실행" },
+      { c: 'codex exec "..."', d: "비대화형 — 스크립트/자동화로 한 번에 실행", ex: 'codex exec "fix lint errors"' },
+      { c: "codex resume", d: "이전 세션 이어서 진행" },
+      { c: "codex --model gpt-5.4", d: "모델·추론 강도 지정" },
+      { group: "세션 내 슬래시 명령" },
+      { c: "/compact", d: "컨텍스트 압축(요약)" },
+      { c: "/clear", d: "세션 상태 초기화" },
+      { c: "/diff", d: "변경된 파일 표시" },
+      { c: "/model", d: "사용 중인 모델 변경" },
+      { c: "/mode", d: "승인(approval) 모드 등 세션 설정 변경" },
+      { group: "설정 / 스킬" },
+      { c: "AGENTS.md", d: "프로젝트 루트에 두어 에이전트 동작·규칙을 정의 (Claude의 CLAUDE.md 와 비슷)" },
+      { custom: true, label: "내가 쓰는 커스텀 스킬", note: "여기에 Codex에서 자주 쓰는 나만의 명령/스킬을 직접 채워 넣으세요. 예: <code>$내명령</code> — 한 줄 설명." },
+    ]
+  },
+];
+
+/* =========================================================================
+   RENDER
+   ========================================================================= */
+const LS_HIDDEN = "mycli:hidden:v1";
+const LS_THEME  = "mycli:theme:v2";   // "system" | "light" | "dark"
+
+let hidden = new Set(JSON.parse(localStorage.getItem(LS_HIDDEN) || "[]"));
+
+const grid = document.getElementById("grid");
+const nav  = document.getElementById("nav");
+const pad2 = n => String(n).padStart(2, "0");
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
+
+/* inline SVG icons (no external deps, currentColor) */
+const svg = inner => `<svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
+const ICON = {
+  search: svg('<circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>'),
+  eye:    svg('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>'),
+  eyeOff: svg('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><line x1="3" y1="3" x2="21" y2="21"/>'),
+  reset:  svg('<path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v5h-5"/>'),
+  system: svg('<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>'),
+  light:  svg('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'),
+  dark:   svg('<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/>'),
+};
+
+let totalItems = 0;
+
+TOOLS.forEach((tool, ti) => {
+  const chno = pad2(ti + 1);
+
+  // index nav
+  const a = document.createElement("a");
+  a.href = "#" + tool.id;
+  a.innerHTML = `<span class="num">${chno}</span>${esc(tool.name.split("—")[0].trim())}`;
+  nav.appendChild(a);
+
+  // card
+  const card = document.createElement("section");
+  card.className = "card";
+  card.id = tool.id;
+  card.style.animationDelay = (ti * 55) + "ms";
+
+  let html = `<div class="card-head">
+      <div class="chno"><span class="ln" aria-hidden="true"></span>${chno} / ${pad2(TOOLS.length)}</div>
+      <h2 class="name">${esc(tool.name)}<span class="pill">${esc(tool.pill)}</span></h2>
+      <div class="summary">${esc(tool.summary)}</div>
+      <div class="meta">${tool.meta}</div>
+    </div>`;
+
+  let idx = 0;
+  tool.items.forEach(it => {
+    if (it.group) { html += `<h3 class="group-label">${esc(it.group)}<span class="gl-line" aria-hidden="true"></span></h3>`; return; }
+    if (it.custom) { html += `<div class="placeholder-note"><b>${esc(it.label)}</b><br>${it.note}</div>`; return; }
+    const id = tool.id + "-" + (idx++);
+    totalItems++;
+    const isHidden = hidden.has(id);
+    const chip = it.k
+      ? `<kbd class="key copyable" role="button" tabindex="0" aria-label="${esc("복사: " + it.c)}">${esc(it.c)}</kbd>`
+      : `<span class="code copyable" role="button" tabindex="0" aria-label="${esc("복사: " + it.c)}">${esc(it.c)}</span>`;
+    const exHtml = it.ex
+      ? `<div class="ex"><span class="ex-label">예시</span><span class="code copyable" role="button" tabindex="0" aria-label="${esc("복사: " + it.ex)}">${esc(it.ex)}</span></div>`
+      : "";
+    const search = (it.c + " " + it.d + " " + (it.ex||"")).toLowerCase();
+    html += `<div class="item ${isHidden ? "is-hidden":""}" data-id="${id}" data-search="${esc(search)}">
+        <div class="item-main">
+          <div class="cmd-line">${chip}<span class="hide-badge">숨김</span></div>
+          <div class="desc">${esc(it.d)}</div>
+          ${exHtml}
+        </div>
+        <button class="eye" type="button" aria-pressed="${isHidden}" aria-label="${isHidden ? "이 항목 다시 보이기" : "이 항목 숨기기"}"><span class="bic" aria-hidden="true">${isHidden ? ICON.eyeOff : ICON.eye}</span></button>
+      </div>`;
+  });
+
+  card.innerHTML = html;
+  grid.appendChild(card);
+});
+
+document.getElementById("stTools").textContent = TOOLS.length;
+document.getElementById("stItems").textContent = totalItems;
+
+/* =========================================================================
+   COPY / HIDE
+   ========================================================================= */
+const toast = document.getElementById("toast");
+const toastTxt = toast.querySelector(".t-txt");
+let toastTimer;
+function showToast(msg){
+  toastTxt.textContent = msg;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>toast.classList.remove("show"), 1400);
+}
+
+function copyText(el){
+  const text = el.textContent;
+  navigator.clipboard.writeText(text).then(
+    ()=>showToast("복사됨: " + text),
+    ()=>showToast("복사 실패 (브라우저 권한 확인)")
+  );
+}
+function setEye(eye, isHidden){
+  eye.setAttribute("aria-pressed", String(isHidden));
+  eye.setAttribute("aria-label", isHidden ? "이 항목 다시 보이기" : "이 항목 숨기기");
+  eye.querySelector("span").innerHTML = isHidden ? ICON.eyeOff : ICON.eye;
+}
+function toggleHide(eye){
+  const item = eye.closest(".item");
+  const id = item.dataset.id;
+  const nowHidden = !hidden.has(id);
+  if (nowHidden) { hidden.add(id); item.classList.add("is-hidden"); }
+  else { hidden.delete(id); item.classList.remove("is-hidden"); }
+  setEye(eye, nowHidden);
+  localStorage.setItem(LS_HIDDEN, JSON.stringify([...hidden]));
+  updateHiddenCount(); applyFilter();
+}
+
+grid.addEventListener("click", e => {
+  const copyEl = e.target.closest(".copyable");
+  if (copyEl) { copyText(copyEl); return; }
+  const eye = e.target.closest(".eye");
+  if (eye) toggleHide(eye);
+});
+
+// keyboard: Enter/Space activates copy chips (role=button spans/kbd)
+grid.addEventListener("keydown", e => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const copyEl = e.target.closest(".copyable");
+  if (copyEl) { e.preventDefault(); copyText(copyEl); }
+});
+
+const revealBtn = document.getElementById("revealBtn");
+revealBtn.addEventListener("click", ()=>{
+  const on = document.body.classList.toggle("reveal");
+  revealBtn.classList.toggle("active", on);
+  revealBtn.setAttribute("aria-pressed", String(on));
+  document.getElementById("revealIcon").innerHTML = on ? ICON.eyeOff : ICON.eye;
+  document.getElementById("revealText").textContent = on ? "다시 숨기기" : "숨긴 항목";
+  applyFilter();
+});
+
+document.getElementById("resetBtn").addEventListener("click", ()=>{
+  if (hidden.size === 0) { showToast("숨긴 항목이 없어요"); return; }
+  if (!confirm("숨긴 항목 " + hidden.size + "개를 모두 다시 표시할까요?")) return;
+  hidden.clear();
+  localStorage.setItem(LS_HIDDEN, "[]");
+  document.querySelectorAll(".item.is-hidden").forEach(it=>{
+    it.classList.remove("is-hidden");
+    const eye = it.querySelector(".eye"); if (eye) setEye(eye, false);
+  });
+  updateHiddenCount(); applyFilter();
+  showToast("전체 초기화 완료");
+});
+
+/* =========================================================================
+   THEME — 시스템 → 라이트 → 다크 순환. 기본값은 시스템(OS 설정 따라감).
+   ========================================================================= */
+const themeBtn = document.getElementById("themeBtn");
+const stTheme  = document.getElementById("stTheme");
+const mql = window.matchMedia("(prefers-color-scheme: dark)");
+const THEMES = ["system", "light", "dark"];
+const STAT  = { system: "시스템", light: "라이트", dark: "다크" };
+
+function effective(mode){ return mode === "system" ? (mql.matches ? "dark" : "light") : mode; }
+
+const themeColorMeta = document.getElementById("themeColorMeta");
+function applyTheme(mode){
+  if (mode === "system") document.documentElement.removeAttribute("data-theme");
+  else document.documentElement.setAttribute("data-theme", mode);
+  const eff = effective(mode);
+  document.getElementById("themeIcon").innerHTML = ICON[mode];
+  document.getElementById("themeText").textContent = STAT[mode];
+  stTheme.textContent = mode === "system" ? `시스템 (${STAT[eff]})` : STAT[mode];
+  themeColorMeta.setAttribute("content", eff === "dark" ? "#1a1c20" : "#f3f4f5");
+}
+
+let themeMode = localStorage.getItem(LS_THEME) || "system";
+if (!THEMES.includes(themeMode)) themeMode = "system";
+applyTheme(themeMode);
+
+themeBtn.addEventListener("click", ()=>{
+  themeMode = THEMES[(THEMES.indexOf(themeMode) + 1) % THEMES.length];
+  localStorage.setItem(LS_THEME, themeMode);
+  applyTheme(themeMode);
+});
+// 시스템 모드일 때 OS 설정이 바뀌면 라벨/상태 갱신
+mql.addEventListener("change", ()=>{ if (themeMode === "system") applyTheme("system"); });
+
+/* =========================================================================
+   SEARCH / FILTER
+   ========================================================================= */
+const search = document.getElementById("search");
+const clearBtn = document.getElementById("clearSearch");
+const noResults = document.getElementById("noResults");
+
+function applyFilter(){
+  const q = search.value.trim().toLowerCase();
+  clearBtn.style.display = q ? "block" : "none";
+  let anyVisible = false;
+
+  document.querySelectorAll(".card").forEach(card => {
+    let cardHasVisible = false;
+    card.querySelectorAll(".item").forEach(item => {
+      const matches = !q || item.dataset.search.includes(q);
+      item.classList.toggle("filtered", !matches);
+      const visible = matches && (!item.classList.contains("is-hidden") || document.body.classList.contains("reveal"));
+      if (visible) cardHasVisible = true;
+    });
+    const hasPlaceholder = card.querySelector(".placeholder-note") && !q;
+    card.classList.toggle("card-hidden", !cardHasVisible && !hasPlaceholder);
+    if (cardHasVisible || hasPlaceholder) anyVisible = true;
+  });
+
+  document.querySelectorAll(".group-label").forEach(g => {
+    let el = g.nextElementSibling, hasItem = false;
+    while (el && !el.classList.contains("group-label")) {
+      if (el.classList.contains("item")) {
+        const vis = !el.classList.contains("filtered") &&
+                    (!el.classList.contains("is-hidden") || document.body.classList.contains("reveal"));
+        if (vis) { hasItem = true; break; }
+      }
+      el = el.nextElementSibling;
+    }
+    g.classList.toggle("group-hidden", !hasItem);
+  });
+
+  noResults.style.display = anyVisible ? "none" : "block";
+}
+
+function syncURL(){
+  const q = search.value.trim();
+  const url = new URL(window.location.href);
+  if (q) url.searchParams.set("q", q); else url.searchParams.delete("q");
+  history.replaceState(null, "", url);
+}
+search.addEventListener("input", ()=>{ applyFilter(); syncURL(); });
+clearBtn.addEventListener("click", ()=>{ search.value=""; applyFilter(); syncURL(); search.focus(); });
+
+document.addEventListener("keydown", e => {
+  if (e.key === "/" && document.activeElement !== search) { e.preventDefault(); search.focus(); }
+  if (e.key === "Escape" && document.activeElement === search) { search.value=""; applyFilter(); syncURL(); search.blur(); }
+});
+
+function updateHiddenCount(){
+  const el = document.getElementById("hiddenCount");
+  el.innerHTML = hidden.size ? `<span class="tag">숨긴 항목 <b>${hidden.size}</b>개</span>` : "";
+}
+// inject static icons
+document.getElementById("searchIcon").innerHTML = ICON.search;
+document.getElementById("revealIcon").innerHTML = ICON.eye;
+document.getElementById("resetIcon").innerHTML = ICON.reset;
+
+// restore search state from URL (?q=)
+const initialQ = new URL(window.location.href).searchParams.get("q");
+if (initialQ) search.value = initialQ;
+updateHiddenCount();
+applyFilter();
+</script>
+</body>
+</html>

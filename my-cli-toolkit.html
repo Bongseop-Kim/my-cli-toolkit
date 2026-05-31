@@ -376,7 +376,7 @@
   <h1 class="title">My CLI Toolkit<span class="cursor" aria-hidden="true"></span></h1>
   <div class="tagline">개인 CLI 명령어 · 단축키 모음.</div>
   <div class="mast-stats">
-    <span>도구 <b id="stTools">6</b>개</span>
+    <span>도구 <b id="stTools">7</b>개</span>
     <span>항목 <b id="stItems">0</b>개</span>
     <span>테마 <b id="stTheme">시스템</b></span>
   </div>
@@ -453,6 +453,34 @@ const TOOLS = [
     ]
   },
 
+  /* -------------------------------------------------- CMUX */
+  {
+    id: "cmux", name: "Cmux", pill: "terminal app",
+    summary: "AI 코딩 에이전트를 위한 macOS 터미널 앱(Ghostty 기반). 세로 탭·분할 창·내장 브라우저·알림 링을 제공합니다.",
+    meta: 'github.com/manaflow-ai/cmux · OMX 연동: <a href="https://cmux.com/ko/docs/agent-integrations/oh-my-codex" target="_blank" rel="noopener">cmux docs</a>',
+    items: [
+      { group: "CLI 명령어" },
+      { c: "cmux omx --madmax --high", d: "cmux 기반 OMX 기본 시작. OMX의 HUD와 pane이 cmux split으로 표시됨" },
+      { c: "cmux omx team", d: "cmux split 기반 OMX team 모드 시작" },
+      { c: 'cmux omx team 3:executor "task"', d: "executor 워커 3개로 병렬 구현 시작", ex: 'cmux omx team 3:executor "fix failing tests with verification"' },
+      { c: 'cmux omx team 2:explore "task"', d: "읽기 전용 탐색 워커로 코드베이스 조사", ex: 'cmux omx team 2:explore "map the payment flow"' },
+      { c: "cmux ssh user@remote", d: "원격 서버에 SSH 작업공간 열기" },
+      { c: "cmux claude-teams", d: "Claude Code 팀(teammate) 모드" },
+      { c: "cmux notify", d: "에이전트에 알림 보내기" },
+      { c: "cmux restore-session", d: "마지막으로 저장된 세션 다시 적용" },
+      { group: "단축키" },
+      { c: "⌘ N", k: true, d: "새 작업공간(workspace)" },
+      { c: "⌘ T", k: true, d: "새 탭(surface)" },
+      { c: "⌘ D", k: true, d: "오른쪽으로 화면 분할" },
+      { c: "⌘ ⇧ D", k: true, d: "아래로 화면 분할" },
+      { c: "⌘ I", k: true, d: "알림 패널 열기" },
+      { c: "⌘ ⇧ U", k: true, d: "가장 최근 안 읽은 항목으로 점프" },
+      { c: "⌘ ⇧ L", k: true, d: "분할 화면에 브라우저 열기" },
+      { c: "⌘ K", k: true, d: "스크롤백(이전 출력) 지우기" },
+      { c: "⌘ ,", k: true, d: "설정 열기" },
+    ]
+  },
+
   /* -------------------------------------------------- YAZI */
   {
     id: "yazi", name: "Yazi", pill: "file manager",
@@ -515,34 +543,6 @@ const TOOLS = [
       { c: "q", k: true, d: "종료" },
       { c: "Q", k: true, d: "폴더 이동 없이 종료 (cd 효과 끄고 종료)" },
       { c: "F1 / ~", k: true, d: "도움말 메뉴 열기" },
-    ]
-  },
-
-  /* -------------------------------------------------- CMUX */
-  {
-    id: "cmux", name: "Cmux", pill: "terminal app",
-    summary: "AI 코딩 에이전트를 위한 macOS 터미널 앱(Ghostty 기반). 세로 탭·분할 창·내장 브라우저·알림 링을 제공합니다.",
-    meta: 'github.com/manaflow-ai/cmux · OMX 연동: <a href="https://cmux.com/ko/docs/agent-integrations/oh-my-codex" target="_blank" rel="noopener">cmux docs</a>',
-    items: [
-      { group: "CLI 명령어" },
-      { c: "cmux omx --madmax --high", d: "cmux 기반 OMX 기본 시작. OMX의 HUD와 pane이 cmux split으로 표시됨" },
-      { c: "cmux omx team", d: "cmux split 기반 OMX team 모드 시작" },
-      { c: 'cmux omx team 3:executor "task"', d: "executor 워커 3개로 병렬 구현 시작", ex: 'cmux omx team 3:executor "fix failing tests with verification"' },
-      { c: 'cmux omx team 2:explore "task"', d: "읽기 전용 탐색 워커로 코드베이스 조사", ex: 'cmux omx team 2:explore "map the payment flow"' },
-      { c: "cmux ssh user@remote", d: "원격 서버에 SSH 작업공간 열기" },
-      { c: "cmux claude-teams", d: "Claude Code 팀(teammate) 모드" },
-      { c: "cmux notify", d: "에이전트에 알림 보내기" },
-      { c: "cmux restore-session", d: "마지막으로 저장된 세션 다시 적용" },
-      { group: "단축키" },
-      { c: "⌘ N", k: true, d: "새 작업공간(workspace)" },
-      { c: "⌘ T", k: true, d: "새 탭(surface)" },
-      { c: "⌘ D", k: true, d: "오른쪽으로 화면 분할" },
-      { c: "⌘ ⇧ D", k: true, d: "아래로 화면 분할" },
-      { c: "⌘ I", k: true, d: "알림 패널 열기" },
-      { c: "⌘ ⇧ U", k: true, d: "가장 최근 안 읽은 항목으로 점프" },
-      { c: "⌘ ⇧ L", k: true, d: "분할 화면에 브라우저 열기" },
-      { c: "⌘ K", k: true, d: "스크롤백(이전 출력) 지우기" },
-      { c: "⌘ ,", k: true, d: "설정 열기" },
     ]
   },
 
@@ -678,6 +678,53 @@ const TOOLS = [
       { c: "$deep-interview → $ralplan → cmux omx team 3:executor → $ultraqa", d: "큰 기능: 요구사항 정리부터 병렬 구현, 검증까지" },
       { c: "$autopilot → $ralph → $ultraqa", d: "명확한 작업: 자동 구현 후 끈질긴 수정과 QA" },
       { c: 'cmux omx team 2:explore → cmux omx team 4:executor', d: "여러 이슈: 먼저 조사팀으로 맵핑하고 구현팀으로 분리 처리" },
+    ]
+  },
+
+  /* -------------------------------------------------- MY SKILLS (skillshare 등록) */
+  {
+    id: "skills", name: "My Skills", pill: "/슬래시 명령",
+    summary: "skillshare로 등록해 둔 내 하네스(skill)들. Claude Code에선 /이름, Codex CLI에선 $이름 으로 호출합니다. 트리거 키워드를 말해도 자동 실행되는 것이 많습니다. (목록: skillshare list --all)",
+    meta: 'skillshare 동기화 · Claude: <span class="term">/이름</span> · Codex: <span class="term">$이름</span>',
+    items: [
+      { custom: true, label: "💡 호출 방법", note: 'Claude Code에서는 <code>/skill-name</code>, Codex CLI에서는 <code>$skill-name</code> 형태로 입력합니다. 예: <code>/react-doctor</code> ↔ <code>$react-doctor</code>. 아래 카드의 각 명령을 클릭하면 <code>/</code> 형태로 복사됩니다.' },
+
+      { group: "공통 · 워크플로우" },
+      { c: "/caveman", d: "토큰 ~75% 절감. 정확도는 유지한 채 원시인 말투로 압축 (lite/full/ultra 강도)", ex: "caveman mode" },
+      { c: "/code-simplifier", d: "최근 수정한 코드를 동작 보존하며 명료·일관·유지보수성 위주로 정리" },
+      { c: "/git-commit", d: "변경 분석 → 컨벤셔널 커밋 메시지 생성 → 논리적 스테이징 후 커밋", ex: "/commit" },
+      { c: "/karpathy-guidelines", d: "과설계·광범위 변경을 막는 행동 가이드. 외과적 수정·검증 가능한 성공 기준" },
+      { c: "/skillshare", d: "50+ AI CLI 툴 전반에 skill·agent를 단일 소스에서 관리·동기화", ex: "skillshare sync" },
+
+      { group: "React · 프론트엔드" },
+      { c: "/frontend-design", d: "generic한 AI 느낌을 피한, 개성 있고 완성도 높은 프론트엔드 UI 생성" },
+      { c: "/react-doctor", d: "기능 완료·커밋 전 React 진단(린트·접근성·번들·아키텍처) 스캔·정리", ex: "/doctor" },
+      { c: "/react-best-practices", d: "Vercel 엔지니어링 기반 React·Next.js 성능 최적화 패턴" },
+      { c: "/composition-patterns", d: "boolean prop 남발 리팩터링·컴파운드 컴포넌트 등 확장 가능한 합성 패턴 (React 19 반영)" },
+      { c: "/web-component-design", d: "React·Vue·Svelte 컴포넌트 패턴·CSS-in-JS·재사용 컴포넌트 아키텍처" },
+      { c: "/web-design-guidelines", d: "Web Interface Guidelines 기준으로 UI 코드 리뷰(접근성·UX·디자인 감사)", ex: "review my UI" },
+      { c: "/design-system-patterns", d: "디자인 토큰·테마 전환·컴포넌트 라이브러리 등 확장형 디자인 시스템 구축" },
+
+      { group: "React Native · 모바일" },
+      { c: "/react-native-skills", d: "RN·Expo 베스트 프랙티스 — 컴포넌트·리스트 성능·애니메이션·네이티브 모듈" },
+      { c: "/react-native-best-practices", d: "FPS·TTI·번들·메모리 누수·리렌더·애니메이션 등 RN 성능 최적화" },
+      { c: "/react-native-design", d: "RN 스타일링·네비게이션·Reanimated 애니메이션 크로스플랫폼 패턴" },
+
+      { group: "Supabase · DB" },
+      { c: "/supabase", d: "Supabase 전반(DB·Auth·Edge Functions·Realtime·Storage·RLS·CLI·MCP) 작업" },
+      { c: "/supabase-postgres-best-practices", d: "Supabase 발 Postgres 쿼리·스키마·설정 성능 최적화" },
+
+      { group: "cmux (터미널 앱 제어)" },
+      { c: "/cmux", d: "창·워크스페이스·pane·포커스·이동 등 cmux 토폴로지·라우팅 제어" },
+      { c: "/cmux-browser", d: "cmux 브라우저 자동화 — 사이트 열기·상호작용·상태 대기·데이터 추출" },
+      { c: "/cmux-workspace", d: "현재 cmux 워크스페이스·터미널 안에서 비간섭 자동화" },
+      { c: "/cmux-settings", d: "~/.config/cmux/cmux.json 설정 조회·편집·검증", ex: "cmux config" },
+      { c: "/cmux-customization", d: "actions·커스텀 명령·레이아웃·팔레트·Dock·단축키 등 cmux 커스터마이즈" },
+      { c: "/cmux-keyboard-shortcuts", d: "cmux 단축키 커스터마이즈·리바인드·템플릿(tmux/Vim 스타일 등)" },
+      { c: "/cmux-markdown", d: "마크다운을 라이브 리로드 뷰어 패널로 열어 터미널 옆에 표시" },
+      { c: "/cmux-diagnostics", d: "cmux 헬스체크·doctor 리포트(훅·알림·세션 복원·소켓 등 진단)" },
+
+      { custom: true, label: "ℹ️ OMC skill은 별도", note: '<b>/oh-my-claudecode:*</b> 계열(autopilot·ralph·ultrawork 등)은 OMC 카드에서 따로 다룹니다. 이 카드는 skillshare로 동기화한 내 개인 하네스만 정리한 것입니다.' },
     ]
   },
 

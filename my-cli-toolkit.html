@@ -596,6 +596,48 @@ const TOOLS = [
     ]
   },
 
+  /* -------------------------------------------------- GIT */
+  {
+    id: "git", name: "Git", pill: "version control",
+    summary: "코드 변경 이력을 관리하고 팀과 주고받는 버전 관리 도구. 핵심 흐름은 받아오기(pull) → 수정 → 올리기(add → commit → push) 한 바퀴입니다.",
+    meta: 'git-scm.com · 기본 흐름: <span class="term">git pull</span> → 수정 → <span class="term">git add .</span> → <span class="term">git commit -m "..."</span> → <span class="term">git push</span>',
+    items: [
+      { custom: true, label: "💡 가장 자주 쓰는 한 바퀴", note: '일 시작할 때 <code>git pull</code>로 최신 내용을 받고, 작업이 끝나면 <code>git add .</code> → <code>git commit -m "메시지"</code> → <code>git push</code> 순서로 올립니다. 헷갈리면 언제든 <code>git status</code>로 현재 상태를 확인하세요.' },
+
+      { group: "① 상태 확인" },
+      { c: "git status", d: "변경된 파일·스테이징 상태 확인 (가장 자주 씀)" },
+      { c: "git log --oneline -10", d: "최근 커밋 10개를 한 줄씩 보기", ex: "git log --oneline -10" },
+      { c: "git branch", d: "브랜치 목록 보기 (현재 브랜치에 * 표시)" },
+
+      { group: "② 받아오기 (pull)" },
+      { c: "git pull", d: "원격(origin)의 최신 내용을 받아 현재 브랜치에 합치기" },
+      { c: "git fetch", d: "원격 변경만 가져오고 합치지는 않음 (먼저 확인하고 싶을 때)" },
+      { c: "git clone <url>", d: "원격 저장소를 통째로 내려받아 복제", ex: "git clone https://github.com/org/repo.git" },
+
+      { group: "③ 올리기 (add → commit → push)" },
+      { c: "git add .", d: "변경된 파일 전부를 스테이징 ( git add 파일명 으로 일부만도 가능 )" },
+      { c: 'git commit -m "메시지"', d: "스테이징한 변경을 메시지와 함께 커밋", ex: 'git commit -m "fix: 로그인 버그 수정"' },
+      { c: "git push", d: "내 커밋을 원격(origin)에 올리기" },
+      { c: "git push -u origin <브랜치>", d: "새로 만든 브랜치를 처음 올릴 때 (이후엔 git push 만)", ex: "git push -u origin feature/login" },
+
+      { group: "④ 브랜치" },
+      { c: "git switch -c <브랜치>", d: "새 브랜치를 만들고 이동 ( git checkout -b 와 같음 )", ex: "git switch -c feature/login" },
+      { c: "git switch <브랜치>", d: "기존 브랜치로 이동" },
+      { c: "git merge <브랜치>", d: "지정한 브랜치를 현재 브랜치에 합치기" },
+
+      { group: "⑤ 되돌리기 · 임시 저장" },
+      { c: "git restore <파일>", d: "수정한 내용 버리고 마지막 커밋 상태로 되돌리기" },
+      { c: "git restore --staged <파일>", d: "스테이징만 해제 (수정 내용은 유지)" },
+      { c: "git stash", d: "작업 중인 변경을 잠시 치워두기 (브랜치 이동 등)" },
+      { c: "git stash pop", d: "치워둔 변경을 다시 꺼내오기" },
+      { c: "git reset --soft HEAD~1", d: "마지막 커밋만 취소 (변경 내용은 그대로 남김)" },
+
+      { group: "⑥ 차이 보기" },
+      { c: "git diff", d: "아직 스테이징하지 않은 변경 내용 보기" },
+      { c: "git diff --staged", d: "스테이징한(커밋될) 변경 내용 보기" },
+    ]
+  },
+
   /* -------------------------------------------------- OMC */
   {
     id: "omc", name: "omc — oh-my-claudecode", pill: "orchestration",
